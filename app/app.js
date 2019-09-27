@@ -1,12 +1,21 @@
 /*eslint-env node*/
 
-var express = require('express');
-var app = express();
+/*globals path */
+const path = require('path');
+var http = require('http'),
+    fs = require('fs');
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+
+fs.readFile(path.resolve(__dirname, '../', 'app/index.html'), function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+    http.createServer(/* @callback */ function(request, response) {  
+        response.writeHead(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+        
+    }).listen(8081);
+    console.log('App listening on port 8081');
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
